@@ -1,0 +1,24 @@
+<view class="container">
+  <view class="post" wx:for="{{posts}}" wx:key="id">
+    <view class="user-info">
+      <image class="avatar" src="{{item.avatarUrl}}" />
+      <text class="nickname">{{item.nickname}}</text>
+    </view>
+    <view class="stats">
+      <view class="stat-item">··今日完成次数：{{item.totalTomatoes}}个</view>
+      <view class="stat-item">··今日专注时长：{{item.totalTime}} 分钟</view>
+    </view>
+    <view class="content">
+      <text class="content-text">{{item.content}}</text>
+    </view>
+    <view class="actions">
+      <button class="action-button" bindtap="like">点赞👍</button>
+      <button class="action-button" bindtap="comment">评论💬</button>
+      <button class="action-button" bindtap="share">分享📤</button>
+    </view>
+    <view class="comment">
+      <text class="comment-nickname">{{item.comment.nickname}}:</text>
+      <text class="comment-text">{{item.comment.text}}</text>
+    </view>
+  </view>
+</view>

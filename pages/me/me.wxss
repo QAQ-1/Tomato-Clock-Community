@@ -1,3 +1,7 @@
+page {
+  overflow: hidden;
+  background: #faf8f8;
+} 
 .avatar-wrapper {
   background: #E7624F;
   padding: 50rpx 0;

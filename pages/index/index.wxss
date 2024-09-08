@@ -1,8 +1,8 @@
 /**index.wxss**/
-/* page {
+ page {
   overflow: hidden;
-  background: #E7624F;
-} */
+  background: #faf8f8;
+} 
 .slider {
   width: 650rpx;
   margin: 40rpx auto;

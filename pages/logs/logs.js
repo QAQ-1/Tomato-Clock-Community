@@ -13,11 +13,11 @@ Page({
     index:0,
     sum: [
       {
-        title: '今日禅定次数',
+        title: '今日完成次数',
         val: '0'
       },
       {
-        title: '累计禅定次数',
+        title: '累计完成次数',
         val: '0'
       },
       {

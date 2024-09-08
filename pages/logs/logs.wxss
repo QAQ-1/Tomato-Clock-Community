@@ -1,10 +1,14 @@
+page {
+  overflow: hidden;
+  background: #faf8f8;
+} 
 .sum {
   display: flex;
   flex-wrap: wrap;
   width: 750rpx;
   height: 350rpx;
   padding-bottom: 40rpx;
-  border-bottom: 3rpx solid #eeeeee;
+  border-bottom: 1rpx solid #c7c1c1bd;
 }
 .sum .sum_item {
   width: 375rpx;

@@ -31,10 +31,8 @@
 
 <view class="clock" hidden="{{!clockShow}}" style="height:{{clockHeight}}rpx">
   <view class="progress">
-    <canvas canvas-id="progress_bg" class="progress_bg">
-    </canvas>
-    <canvas canvas-id="progress_active" class="progress_active">
-    </canvas>
+    <canvas type="2d" id="progress_bg" class="progress_bg" width="300px" height="300px"></canvas>
+        <canvas type="2d" id="progress_active" class="progress_active"></canvas>
     <view class="progress_text">
       {{timeStr}}
     </view>

@@ -2,7 +2,7 @@
 App({
   onLaunch: function () {
     wx.cloud.init({
-      env:'tomato-9kzpn',
+      env:'tomato-clock-0glk22l61e440a19',
       // env:'cloud1-9gudgpcx9aaa4dd8',
       traceUser:true
     })

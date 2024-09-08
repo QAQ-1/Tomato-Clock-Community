@@ -59,7 +59,7 @@ Page({
   },
   onLoad: function () {
     //750rpx
-    var res = wx.getSystemInfoSync();
+    var res = wx.getWindowInfo();
     var rate = 750 / res.windowWidth;
     this.setData({
       rate: rate,
@@ -134,70 +134,86 @@ Page({
       this.drawActive();
     }
   },
-  drawBg: function () {
-    var lineWidth = 6 / this.data.rate;
-    var ctx = wx.createCanvasContext('progress_bg');
-    ctx.setLineWidth(lineWidth);
-    ctx.setStrokeStyle('#000000');
-    ctx.setLineCap('round');
-    ctx.beginPath();
-    ctx.arc(400 / this.data.rate / 2, 400 / this.data.rate / 2, 400 / this.data.rate / 2 - 2 * lineWidth, 0, 2 * Math.PI, false);
-    ctx.stroke();
-    ctx.draw();
-  },
-  drawActive: function () {
-    var _this = this;
-    var timer = setInterval(function () {
-      var angle = 1.5 + 2 * (_this.data.time * 60 * 1000 - _this.data.eTime) / (_this.data.time * 60 * 1000);
-      var currentTime = _this.data.mTime - 1000;
-      var currentTime1 = _this.data.eTime - 1000;
-      _this.setData({
-        mTime: currentTime,
-        eTime: currentTime1
-      });
-      if (angle < 3.5) {
-        if (currentTime % 1000 == 0) {
-          var timeStr1 = currentTime / 1000; // s 59
-          var timeStr2 = parseInt(timeStr1 / 60); // m  0
-          var timeStr3 = (timeStr1 - timeStr2 * 60) >= 10 ? (timeStr1 - timeStr2 * 60) : '0' + (timeStr1 - timeStr2 * 60).toString();
-          var timeStr4 = timeStr2 >= 10 ? timeStr2 : '0' + timeStr2.toString();
-          _this.setData({
-            timeStr: timeStr4 + ':' + timeStr3
-          })
-        }
-        var lineWidth = 6 / _this.data.rate;
-        var ctx = wx.createCanvasContext('progress_active');
-        ctx.setLineWidth(lineWidth);
-        ctx.setStrokeStyle('#ffffff');
-        ctx.setLineCap('round');
-        ctx.beginPath();
-        ctx.arc(400 / _this.data.rate / 2, 400 / _this.data.rate / 2, 400 / _this.data.rate / 2 - 2 * lineWidth, 1.5 * Math.PI, angle * Math.PI, false);
-        ctx.stroke();
-        ctx.draw();
-      }
-      else {
-        var lineWidth = 6 / _this.data.rate;
-        var ctx = wx.createCanvasContext('progress_active');
-        ctx.setLineWidth(lineWidth);
-        ctx.setStrokeStyle('#ffffff');
-        ctx.setLineCap('round');
-        ctx.beginPath();
-        ctx.arc(400 / _this.data.rate / 2, 400 / _this.data.rate / 2, 400 / _this.data.rate / 2 - 2 * lineWidth, 1.5 * Math.PI, angle * Math.PI, false);
-        ctx.stroke();
-        ctx.draw();
-        _this.setData({
-          timeStr: '00:00',
-          okShow: true,
-          pauseShow: false,
-          continueCancleShow: false
+  drawBg: function() {
+    const lineWidth = 6 / this.data.rate;//px
+    const query = wx.createSelectorQuery()
+    query.select('#progress_bg')
+        .fields({ node:true, size: true})
+        .exec((res) => {
+           const canvas = res[0].node
+           const ctx = canvas.getContext('2d')
+           const dpr = wx.getWindowInfo().pixelRatio
+           canvas.width = res[0].width * dpr
+           canvas.height = res[0].height * dpr
+           ctx.scale(dpr, dpr)
+           ctx.lineCap='round'
+           ctx.lineWidth="lineWidth"
+           ctx.beginPath()
+           ctx.arc(400/this.data.rate/2,400/this.data.rate/2,400/this.data.rate/2-2*lineWidth,0,2*Math.PI,false)
+           ctx.strokeStyle ="#000000"
+           ctx.stroke()
         })
-        clearInterval(timer);
-      }
-    }, 1000);
-    _this.setData({
-      timer: timer
-    })
-  },
+},
+drawActive: function() {
+   var _this = this;
+   var timer = setInterval(function (){
+       var angle = 1.5 + 2*(_this.data.time*60*1000 - _this.data.mTime)/(_this.data.time*60*1000);
+       var currentTime = _this.data.mTime - 100
+       _this.setData({
+           mTime:currentTime
+       });
+       if(angle < 3.5){
+           if(currentTime % 1000 == 0){
+               var timeStr1 = currentTime / 1000;//s
+               var timeStr2 = parseInt(timeStr1 / 60); //m
+               var timeStr3 = (timeStr1 - timeStr2 * 60) >= 10 ? (timeStr1 - timeStr2 * 60) :"0" +  (timeStr1 - timeStr2 * 60);
+               var timeStr2 = timeStr2 >= 10 ? timeStr2:"0" + timeStr2;
+               _this.setData({
+                timeStr:timeStr2 + ":" + timeStr3
+               })
+             };
+            const lineWidth = 6 / _this.data.rate;//px
+            const query = wx.createSelectorQuery()
+            query.select('#progress_active')
+            .fields({ node:true, size: true})
+            .exec((res) => {
+                const canvas = res[0].node
+                const ctx = canvas.getContext('2d')
+
+                const dpr = wx.getWindowInfo().pixelRatio
+                canvas.width = res[0].width * dpr
+                canvas.height = res[0].height * dpr
+                ctx.scale(dpr, dpr)
+                ctx.lineCap='round'
+                ctx.lineWidth="lineWidth"
+                ctx.beginPath()
+                ctx.arc(400/ _this.data.rate/2,400/_this.data.rate/2,400/_this.data.rate/2-2*lineWidth,1.5*Math.PI,angle*Math.PI,false)
+                ctx.strokeStyle ="#ffffff"
+                ctx.stroke()
+                
+           })
+       } else {
+           var logs = wx.getStorageSync("logs") || [];
+           _this.setData({
+            timeStr:"00:00",
+            pauseShow: false,
+            continueCancleShow: false,
+            okShow: true,
+         });
+           logs.unshift({
+               date: formatTime(new Date),
+               cate: _this.data.cateActive,
+               time: _this.data.time
+           });
+           wx.setStorageSync('logs', logs);
+           
+        clearInterval(timer); 
+       }  
+   },100);
+   _this.setData({
+       timer :timer
+   })
+},
   pause: function () {
     clearInterval(this.data.timer);
     this.setData({
